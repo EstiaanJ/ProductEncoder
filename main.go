@@ -29,7 +29,9 @@ func (h *homeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 type productNumberHandler struct{}
 
 func (h *productNumberHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/part-number-decoder" || r.URL.Path == "/iso-decoder" || r.URL.Path == "/home" {
+	if r.URL.Path == "/" {
+		http.ServeFile(w, r, "index.html")
+	} else if r.URL.Path == "/part-number-decoder" || r.URL.Path == "/iso-decoder" || r.URL.Path == "/home" || r.URL.Path == "/" {
 
 	} else {
 		http.ServeFile(w, r, "product-number-decoder.html")

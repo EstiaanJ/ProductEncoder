@@ -153,7 +153,8 @@
           elementsHTML += '<button type="submit" onclick="location.href=\'/GNTF\'; ">Tube Fittings</button>';
           break;
         case typeSelectDepth: //Type Selection
-          var baseLocation = '/' + splitURL.slice(1).join('/');
+          var baseLocation = '/' + splitURL.slice(typeSelectDepth).join('/');
+          alert("Base Location from type Select: " + baseLocation)
           elementsHTML = '<label for="type">Class:</label>';
           switch (classURL) {
             case "GNHF":
