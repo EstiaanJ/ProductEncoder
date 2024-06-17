@@ -105,6 +105,10 @@
   </div>
   <script>
     const classSelectDepth = 2;
+    const typeSelectDepth = 3;
+    const sizeSelectDepth = 4;
+    const materialSelectDepth = 5;
+    const completeDepth = 6;
 
     function getSubURL() {
       var url = window.location.href;
@@ -122,10 +126,10 @@
       var url = window.location.href;
       var urlDepth = url.split(/[?#]/).shift().match(/\/[^/]+?/g).length;
       var splitURL = url.split("/");
-      var classURL = splitURL[3];
-      var typeURL = splitURL[4];
-      var sizeURL = splitURL[5];
-      var materialURL = splitURL[6];
+      var classURL = splitURL[classSelectDepth + 1];
+      var typeURL = splitURL[typeSelectDepth + 1];
+      var sizeURL = splitURL[sizeSelectDepth + 1];
+      var materialURL = splitURL[materialSelectDepth + 1];
       //var materialClassURL = sizeURL[7];
 
 
@@ -148,7 +152,7 @@
           elementsHTML += '<button type="submit" onclick="location.href=\'/GNPL\'; ">PVC Pipe and Fittings</button>';
           elementsHTML += '<button type="submit" onclick="location.href=\'/GNTF\'; ">Tube Fittings</button>';
           break;
-        case 2: //Type Selection
+        case typeSelectDepth: //Type Selection
           var baseLocation = '/' + splitURL.slice(1).join('/');
           elementsHTML = '<label for="type">Class:</label>';
           switch (classURL) {
@@ -300,7 +304,7 @@
               break;
           }
           break;
-        case 3:// Size selection
+        case sizeSelectDepth:// Size selection
           switch (typeURL) {
             case "CHS":
             case "CLH":
@@ -329,7 +333,7 @@
               break;
           }
           break;
-        case 4:// Material Class selection
+        case materialSelectDepth:// Material Class selection
           var baseLocation = '/' + splitURL.slice(3).join('/');
           elementsHTML = '<label for="type">Material Type:</label>';
           switch (classURL) {
@@ -391,7 +395,7 @@
               break;
           }
           break;
-        case 5:
+        case completeDepth:
           elementsHTML += '<h3>It looks like the product number is complete, press finish to get the product number.</h3>' 
         break
       }
