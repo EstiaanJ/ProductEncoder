@@ -66,8 +66,8 @@
           </table>
         </div>
         <script>function decodeNumber() {
-            const partNumberInput = document.getElementById("partNumber");
-            const partNumber = partNumberInput.value;
+
+            const partNumber = document.getElementById("partNumber").value.trim();
             const outputTable = document.getElementById("outputTable");
 
             // Fill in the appropriate cases and descriptions for each function
