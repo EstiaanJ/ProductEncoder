@@ -143,7 +143,7 @@
           alert("URL Depth Too Shallow " + urlDepth);
           break;
         case classSelectDepth: //Class selection
-          var baseLocation = '/' + splitURL.slice(classSelectDepth).join('/');
+          var baseLocation = '/' + splitURL.slice(classURL).join('/');
           elementsHTML = '<label for="type">Type:</label><button type="submit" onclick="location.href=\'' + baseLocation + '/GNHF\'; ">Hoses & Hose Fittings</button>';
           elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNHF\'; ">Hydraulic Fittings</button>';
           elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNLT\'; ">Lot Track Items</button>';
@@ -154,7 +154,7 @@
           elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNTF\'; ">Tube Fittings</button>';
           break;
         case typeSelectDepth: //Type Selection
-          var baseLocation = '/' + splitURL.slice(typeSelectDepth).join('/');
+          var baseLocation = '/' + splitURL.slice(typeURL).join('/');
           alert("Base Location from type Select: " + baseLocation)
           elementsHTML = '<label for="type">Class:</label>';
           switch (classURL) {
