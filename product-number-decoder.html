@@ -143,14 +143,14 @@
           alert("URL Depth " + urlDepth);
           break;
         case classSelectDepth: //Class selection
-          elementsHTML = '<label for="type">Type:</label><button type="submit" onclick="location.href=\'/GNHF\'; ">Hoses & Hose Fittings</button>';
-          elementsHTML += '<button type="submit" onclick="location.href=\'/GNHF\'; ">Hydraulic Fittings</button>';
-          elementsHTML += '<button type="submit" onclick="location.href=\'/GNLT\'; ">Lot Track Items</button>';
-          elementsHTML += '<button type="submit" onclick="location.href=\'/GNMI\'; ">Misc Items</button>';
-          elementsHTML += '<button type="submit" onclick="location.href=\'/GNPF\'; ">Pipe Fittings</button>';
-          elementsHTML += '<button type="submit" onclick="location.href=\'/GNPI\'; ">Pipe Work</button>';
-          elementsHTML += '<button type="submit" onclick="location.href=\'/GNPL\'; ">PVC Pipe and Fittings</button>';
-          elementsHTML += '<button type="submit" onclick="location.href=\'/GNTF\'; ">Tube Fittings</button>';
+          elementsHTML = '<label for="type">Type:</label><button type="submit" onclick="location.href=\'' + baseLocation + '/GNHF\'; ">Hoses & Hose Fittings</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNHF\'; ">Hydraulic Fittings</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNLT\'; ">Lot Track Items</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNMI\'; ">Misc Items</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNPF\'; ">Pipe Fittings</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNPI\'; ">Pipe Work</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNPL\'; ">PVC Pipe and Fittings</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNTF\'; ">Tube Fittings</button>';
           break;
         case typeSelectDepth: //Type Selection
           var baseLocation = '/' + splitURL.slice(typeSelectDepth).join('/');
