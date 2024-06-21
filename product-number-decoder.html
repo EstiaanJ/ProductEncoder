@@ -114,7 +114,7 @@
       var url = window.location.href;
       var urlDepth = url.split(/[?#]/).shift().match(/\/[^/]+?/g).length;
       var splitURL = url.split("/");
-      return '/' + splitURL.slice(3).join('/');
+      return '/' + splitURL.slice(4).join('/');
     }
 
     function generatePartCode() {
@@ -126,7 +126,7 @@
       var url = window.location.href;
       var urlDepth = url.split(/[?#]/).shift().match(/\/[^/]+?/g).length;
       var splitURL = url.split("/");
-      var classURL = splitURL[classSelectDepth + 1];
+      var classURL = splitURL[classSelectDepth + 2];
       var typeURL = splitURL[typeSelectDepth + 1];
       var sizeURL = splitURL[sizeSelectDepth + 1];
       var materialURL = splitURL[materialSelectDepth + 1];
@@ -135,15 +135,15 @@
 
       let elementsHTML = '';
 
-      alert("URL: " + url + " | Url Depth: " + urlDepth)
+      console.log("URL: " + url + " | Url Depth: " + urlDepth)
 
       switch (urlDepth) {
         case 0:
         case 1:
-          alert("URL Depth Too Shallow " + urlDepth);
+          console.log("URL Depth Too Shallow " + urlDepth);
           break;
         case classSelectDepth: //Class selection
-          var baseLocation = '/' + splitURL.slice(classURL).join('/');
+          var baseLocation = '/' + splitURL.slice(3).join('/');
           elementsHTML = '<label for="type">Type:</label><button type="submit" onclick="location.href=\'' + baseLocation + '/GNHF\'; ">Hoses & Hose Fittings</button>';
           elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNHF\'; ">Hydraulic Fittings</button>';
           elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNLT\'; ">Lot Track Items</button>';
@@ -154,9 +154,10 @@
           elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNTF\'; ">Tube Fittings</button>';
           break;
         case typeSelectDepth: //Type Selection
-          var baseLocation = '/' + splitURL.slice(typeURL).join('/');
-          alert("Base Location from type Select: " + baseLocation)
+          var baseLocation = '/' + splitURL.slice(3).join('/');
+          console.log("Base Location from type Select: " + baseLocation)
           elementsHTML = '<label for="type">Class:</label>';
+          console.log("classURL: " + classURL)
           switch (classURL) {
             case "GNHF":
               elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CMF\'">Camlock MF</button>';
@@ -302,7 +303,7 @@
               elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VSC\'">Valve Swing Check</button>';
               break;
             default:
-              alert("Unknown Class:" + baseLocation)
+              console.log("Unknown Class:" + baseLocation)
               break;
           }
           break;
