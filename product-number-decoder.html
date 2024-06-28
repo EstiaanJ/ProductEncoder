@@ -101,7 +101,7 @@
     <br></br>
     <button type="submit" onclick="generatePartCode()">FINISH (Generate Product Number)</button>
     <br></br>
-    <button type="button" onclick="location.href='/'">Home (Start Over)</button>
+    <button type="button" onclick="location.href='/product-number-decoder'">Home (Start Over)</button>
   </div>
   <script>
     const classSelectDepth = 2;
@@ -127,10 +127,7 @@
       var urlDepth = url.split(/[?#]/).shift().match(/\/[^/]+?/g).length;
       var splitURL = url.split("/");
       var classURL = splitURL[classSelectDepth + 2];
-      var typeURL = splitURL[typeSelectDepth + 1];
-      var sizeURL = splitURL[sizeSelectDepth + 1];
-      var materialURL = splitURL[materialSelectDepth + 1];
-      //var materialClassURL = sizeURL[7];
+      var typeURL = splitURL[typeSelectDepth + 2];
 
 
       let elementsHTML = '';
@@ -144,9 +141,10 @@
           break;
         case classSelectDepth: //Class selection
           var baseLocation = '/' + splitURL.slice(3).join('/');
-          elementsHTML = '<label for="type">Type:</label><button type="submit" onclick="location.href=\'' + baseLocation + '/GNHF\'; ">Hoses & Hose Fittings</button>';
+          elementsHTML = '<label for="type">Type:</label><button type="submit" onclick="location.href=\'' + baseLocation + '/GNEC\'; ">Electrical Components</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNHF\'; ">Hoses & Hose Fittings</button>';
           elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNHF\'; ">Hydraulic Fittings</button>';
-          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNLT\'; ">Lot Track Items</button>';
+          //elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNLT\'; ">Lot Track Items</button>';
           elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNMI\'; ">Misc Items</button>';
           elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNPF\'; ">Pipe Fittings</button>';
           elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNPI\'; ">Pipe Work</button>';
@@ -159,6 +157,10 @@
           elementsHTML = '<label for="type">Class:</label>';
           console.log("classURL: " + classURL)
           switch (classURL) {
+            case "GNEC":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CAP\'">Power Cable</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/PL3\'">3 Pin Plug</button>';
+              break;
             case "GNHF":
               elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CMF\'">Camlock MF</button>';
               elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CAM\'">Camlock MM</button>';
@@ -308,6 +310,7 @@
           }
           break;
         case sizeSelectDepth:// Size selection
+          console.log("Size Select | typeURL: " + typeURL);
           switch (typeURL) {
             case "CHS":
             case "CLH":
@@ -330,6 +333,14 @@
               elementsHTML = '<label for="sizeA">Size A:</label> <input type="text" id="sizeA"> X <label for="sizeB">Size B:</label> <input type="text" id="sizeB">';
               elementsHTML += '<button type="submit" onclick="goToNextMultipleX()">Next</button>';
               break;
+            case "CAP": 
+              elementsHTML = '<label for="size">Thickness (mm):</label> <input type="text" id="size">';
+              elementsHTML += '<button type="submit" onclick="goToNext()">Next</button>';
+              break;
+            case "PL3":
+              elementsHTML = '<label for="size">Amps:</label> <input type="text" id="size">';
+              elementsHTML += '<button type="submit" onclick="goToNextAmp()">Next</button>';
+              break;
             default:
               elementsHTML = '<label for="size">Size:</label> <input type="text" id="size">';
               elementsHTML += '<button type="submit" onclick="goToNext()">Next</button>';
@@ -340,6 +351,11 @@
           var baseLocation = '/' + splitURL.slice(3).join('/');
           elementsHTML = '<label for="type">Material Type:</label>';
           switch (classURL) {
+            case "GNEC":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CSP\'">CSP</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/EPR\'">EPR</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/PVC\'">PVC</button>';
+              break;
             case "GNHF":
               elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GAL\'">Steel Galvanized</button>';
               elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS2205\'">Stainless Steel 2205</button>';
@@ -403,6 +419,19 @@
         break
       }
       mainForm.innerHTML = elementsHTML;
+    }
+
+    function goToNextAmp() {
+      var sizeValue = document.getElementById('size').value;
+      var newVal = '';
+      if (sizeValue.length == 1) {
+        newVal = '0' + sizeValue;
+      } else {
+        newVal = sizeValue;
+      }
+      var baseURL = window.location.href;
+      const nextURL = baseURL + '/' + newVal;
+      location.href = nextURL;
     }
 
     function goToNext() {
