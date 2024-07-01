@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Code Generator</title>
+  <style>
+    /*<!--#CCA43B-->*/
+    body {
+      font-family: Helvetica,'Gill Sans', Verdana, Arial, sans-serif;
+      background-color: #E5E5E5;
+    }
+    
+    .container {
+      width: 70%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 4px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-height: 720px) {
+      .container {
+        width: 100%;
+      }
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    select,
+    input {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      padding: 5px;
+      border: 1px solid #E5E5E5;
+      border-radius: 4px;
+    }
+
+    select {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    button {
+      width: 100%;
+      margin-bottom: 3px;
+      background-color: #363636;
+      color: #E5E5E5;
+      font-weight: bold;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #8DA9C4;
+      color: #363636;
+    }
+
+    #partCode {
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="container">
+    <h1>Product Code Generator</h1>
+    <p1>You can use the back button on your browser to go back a step</p1>
+    <br></br>
+    <form id="mainForm" onsubmit="event.preventDefault(); dynamicElements();">
+    </form>
+    <br></br>
+    <br></br>
+    <button type="submit" onclick="generatePartCode()">FINISH (Generate Product Number)</button>
+    <br></br>
+    <button type="button" onclick="location.href='/product-number-decoder'">Home (Start Over)</button>
+  </div>
+  <script>
+    const classSelectDepth = 2;
+    const typeSelectDepth = 3;
+    const sizeSelectDepth = 4;
+    const materialSelectDepth = 5;
+    const completeDepth = 6;
+
+    function getSubURL() {
+      var url = window.location.href;
+      var urlDepth = url.split(/[?#]/).shift().match(/\/[^/]+?/g).length;
+      var splitURL = url.split("/");
+      return '/' + splitURL.slice(4).join('/');
+    }
+
+    function generatePartCode() {
+      var subURL = getSubURL().replaceAll("/", "");
+      subURL = subURL.replaceAll("?","/");
+      alert("Your prodcut number is: " + subURL);
+    }
+
+    function dynamicElements() {
+      var url = window.location.href;
+      var urlDepth = url.split(/[?#]/).shift().match(/\/[^/]+?/g).length;
+      var splitURL = url.split("/");
+      var classURL = splitURL[classSelectDepth + 2];
+      var typeURL = splitURL[typeSelectDepth + 2];
+
+
+      let elementsHTML = '';
+
+      console.log("URL: " + url + " | Url Depth: " + urlDepth)
+
+      switch (urlDepth) {
+        case 0:
+        case 1:
+          console.log("URL Depth Too Shallow " + urlDepth);
+          break;
+        case classSelectDepth: //Class selection
+          var baseLocation = '/' + splitURL.slice(3).join('/');
+          elementsHTML = '<label for="type">Type:</label><button type="submit" onclick="location.href=\'' + baseLocation + '/GNDC\'; ">Drive Components</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNEC\'; ">Electrical Components</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNFA\'; ">Fasteners</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNHF\'; ">Hoses & Hose Fittings</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNHF\'; ">Hydraulic Fittings</button>';
+          //elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNLT\'; ">Lot Track Items</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNMI\'; ">Misc Items</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNPF\'; ">Pipe Fittings (Excluding PVC)</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNPI\'; ">Pipe Work</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNPL\'; ">PVC Pipe and Fittings</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNTF\'; ">Tube Fittings</button>';
+          elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GNVA\'; ">Valves</button>';
+          break;
+        case typeSelectDepth: //Type Selection
+          var baseLocation = '/' + splitURL.slice(3).join('/');
+          console.log("Base Location from type Select: " + baseLocation)
+          elementsHTML = '<label for="type">Class:</label>';
+          console.log("classURL: " + classURL)
+          switch (classURL) {
+            case "GNDC":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/COC\'">Coupling Complete</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/COF\'">Coupling Flexible</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/TAB\'">Taperlock Bush</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/COH\'">Coupling Hub</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/COI\'">Coupling Insert</button>';
+              break;
+            case "GNEC":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CAP\'">Power Cable</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/PL3\'">3 Pin Plug</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/LED\'">LED Light</button>';
+              break;
+            case "GNFA":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/ATH\'">All Thread</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/B&N\'">Bolt & Nut</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/NUT\'">Nut</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/NUH\'">Nut Hex</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/ROD\'">Rod</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/WAS\'">Washer</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/WAF\'">Washer Flat</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/WSP\'">Washer Spring</button>';
+              break;
+            case "GNHF":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CMF\'">Camlock MF</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CAM\'">Camlock MM</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CHS\'">Clamp Hose Super</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CLH\'">Clamp Hose Worm Drive</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/COM\'">Connector Male</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CMR\'">Connector Male Reducing</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/COU\'">Coupling</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/EMH\'">Elbow Male Hose</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/EMR\'">Elbow Male Hose Reducing</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/HOS\'">Hose</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/HOA\'">Hose Assembly</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/HOD\'">Hose Delivery</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/HMP\'">Hose for MP1</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/HFL\'">Hose Fuel Line Fire Resistant</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/HOL\'">Hose Layflat</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/JOH\'">Joiner Hose</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/OCH\'">O Clip Hose</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/TAH\'">Tail Hose</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/THF\'">Tail Hose Female</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/TFR\'">Tail Hose Female Reducing</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/THE\'">Tee Hose</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/COM\'">Connector Male</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CMR\'">Connector Male Reducing</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/EMH\'">Elbow Male Hose</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/EMR\'">Elbow Male Hose Reducing</button>';
+              break;
+            case "GNMI":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BAS\'">Base Inertia</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BAT\'">Battery</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BAB\'">Battery Box</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BAL\'">Battery Lead</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/COM\'">Connector Male</button>';
+              break;
+            case "GNPF":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BUR\'">Bush Reducing</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BUT\'">Bush Tube</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BFF\'">Bush Tube F/F</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BMF\'">Bush Tube M/F</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BMM\'">Bush Tube M/M</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CAP\'">Cap End</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/COS\'">Connector Straight</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/COU\'">Coupling</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CTS\'">CTS Flange</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/E45\'">Elbow 45 deg</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/E45FL\'">Elbow 45 deg F/F long radius</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/E45FS\'">Elbow 45 deg F/F short radius</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/E45L\'">Elbow 45 deg M/F long radius</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/E45S\'">Elbow 45 deg M/F short radius</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/E45ML\'">Elbow 45 deg M/M long radius</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/E45MS\'">Elbow 45 deg M/M short radius</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/E90\'">Elbow 90 deg</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/E90FL\'">Elbow 90 deg F/F long radius</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/E90FS\'">Elbow 90 deg F/F short radius</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/E90L\'">Elbow 90 deg M/F long radius</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/E90S\'">Elbow 90 deg M/F short radius</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/E90ML\'">Elbow 90 deg M/M long radius</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/E90MS\'">Elbow 90 deg M/M short radius</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/ELV\'">Eliminator Vibration</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/FLR\'">Flexible Rubber Bellows</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/FRB\'">Frame Brazing</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/JOF\'">Joint Flexible</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/LUM\'">Lump End</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/LEM\'">Lump End Male</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/NIP\'">Nipple</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/NIB\'">Nipple Barrel</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/NIH\'">Nipple Hex</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/NIR\'">Nipple Reducing</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/NIT\'">Nipple Toe</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/NTU\'">Nipple Tube</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/N&T\'">Nut and Tail</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/PLU\'">Plug</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/REC\'">Reducers Concentric</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/REE\'">Reducers Eccentric</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SOC\'">Socket</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SOH\'">Socket Hex</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SOL\'">Socket Lugged</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SOR\'">Socket Reducing</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SOV\'">Socket Valve</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/STF\'">Strainer Flanged</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/STS\'">Strainer Screwed</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/STU\'">Strainer Union</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/TEE\'">Tee</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/TER\'">Tee Reducing</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/UBO\'">U Bolt</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/UBF\'">Union Barrel F/F</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/UBM\'">Union Barrel M/F</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/UNB\'">Union Barrel</button>';
+              break;
+            case "GNPI":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/ASA\'">Assembly Annubar</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/AHB\'">Assembly Hydrant Bypass</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/HDCT\'">Hard Drawn Copper Tube</button>';
+              break;
+            case "GNPL":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/ADV\'">Adaptor Valve</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BAR\'">Bar Round</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BUR\'">Bush Reducing</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CAP\'">Cap End</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CPL\'">Coupling Pool</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CSE\'">Coupling Sewer</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/E90\'">Elbow 90 deg</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/PC12\'">Pipe Class 12</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/PC6\'">Pipe Class 6</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/PC9\'">Pipe Class 9</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/PLS\'">Plug Screwed</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/PRC\'">Pressure Reducer Coupling</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/PSC\'">Pressure Coupling</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SOV\'">Socket Valve</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/TEE\'">Tee</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/UNB\'">Union Barrel</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VFF\'">Valve Ball FF</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VFO\'">Valve Foot</button>';
+              break;
+            case "GNTF":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CCO\'">Connector Compression Olive</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CCC\'">Connector Compression Conetite</button>';
+            case "GNVA":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VAB\'">Valve Ball 1 piece</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VB2\'">Valve Ball 2 piece</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VB3\'">Valve Ball 3 piece</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VBL\'">Valve Ball Lockable</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VBM\'">Valve Ball Mini</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VBU\'">Valve Butterfly</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VBG\'">Valve Butterfly Gear Driven</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VAC\'">Valve Check</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VCW\'">Valve Check Wafer</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VFO\'">Valve Foot</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VFF\'">Valve Foot Flanged</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VAG\'">Valve Gate</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VGF\'">Valve Gate Flanged</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VGO\'">Valve Gate OS+Y</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VGT\'">Valve Gate Tested</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VGU\'">Valve Gate Untested F/F</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VAK\'">Valve Knife</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VPR\'">Valve Pressure Relief</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VPS\'">Valve Pressure Sustaining</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VS12\'">Valve Solenoid 12V</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VS240\'">Valve Solenoid 240V</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/V24\'">Valve Solenoid 24V</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VSP\'">Valve Spring Check</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VAS\'">Valve Stop</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VSC\'">Valve Swing Check</button>';
+              break;
+            default:
+              console.log("Unknown Class:" + baseLocation)
+              break;
+          }
+          break;
+        case sizeSelectDepth:// Size selection
+          console.log("Size Select | typeURL: " + typeURL);
+          switch (typeURL) {
+            case "CHS":
+            case "TAB":
+            case "CLH":
+            case "CMR":
+            case "EMR":
+            case "TFR":
+            case "ADV":
+            case "BUR":
+            case "PRC":
+            case "NIH":
+            case "PLU":
+            case "REC":
+            case "SOH":
+            case "STS":
+            case "HDCT":
+              elementsHTML = '<label for="sizeA">Size A:</label> <input type="text" id="sizeA"> X <label for="sizeB">Size B:</label> <input type="text" id="sizeB">';
+              elementsHTML += '<button type="submit" onclick="goToNextMultiple()">Next</button>';
+              break; //Break for all a X b sizes with no X in the middle
+            case "HOA":
+              elementsHTML = '<label for="sizeA">Size A:</label> <input type="text" id="sizeA"> X <label for="sizeB">Size B:</label> <input type="text" id="sizeB">';
+              elementsHTML += '<button type="submit" onclick="goToNextMultipleX()">Next</button>';
+              break; //Break for all a X b sizes with X in the middle
+            case "CAP": 
+              elementsHTML = '<label for="size">Thickness (mm):</label> <input type="text" id="size">';
+              elementsHTML += '<button type="submit" onclick="goToNext()">Next</button>';
+              break; //Break for all Thicnkess (mm)
+            case "PL3":
+              elementsHTML = '<label for="size">Amps:</label> <input type="text" id="size">';
+              elementsHTML += '<button type="submit" onclick="goToNextAmp()">Next</button>';
+              break; //Break for all Amps
+            case "COC":
+              elementsHTML = '<label for="sizeA">Size A:</label> <input type="text" id="sizeA"> / <label for="sizeB">Size B:</label> <input type="text" id="sizeB">';
+              elementsHTML += '<button type="submit" onclick="goToNextMultipleSLASH()">Next</button>';
+              break;
+            case "COF":
+            case "COH":
+            case "COI":
+              elementsHTML = '<label for="size">HRC model number followed by Flange letter B,E,F or H:</label> <input type="text" id="size">';
+              elementsHTML += '<button type="submit" onclick="goToNextHRC()">Next</button>';
+              break;
+            default:
+              elementsHTML = '<label for="size">Size:</label> <input type="text" id="size">';
+              elementsHTML += '<button type="submit" onclick="goToNext()">Next</button>';
+              break; //Break for everything else
+          }
+          break;
+        case materialSelectDepth:// Material Class selection
+          var baseLocation = '/' + splitURL.slice(3).join('/');
+          elementsHTML = '<label for="type">Material Type:</label>';
+          switch (classURL) {
+            case "GNDC":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/DIS\'">Disc</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/TYR\'">Tyre</button>';
+              break;
+            case "GNEC":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CSP\'">CSP</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/EPR\'">EPR</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/PVC\'">PVC</button>';
+              break;
+            case "GNFA":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BR\'">Brass</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS2205\'">Stainless Steel 2205</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS304\'">Stainless Steel 304</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS\'">Stainless Steel 316</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GAL\'">Steel Galvanised</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/ZN\'">Zinc</button>';
+              break;
+            case "GNHF":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GAL\'">Steel Galvanized</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS2205\'">Stainless Steel 2205</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS304\'">Stainless Steel 304</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS\'">Stainless Steel 316</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/AL\'">Steel Aluminium</button>';
+              break;
+            case "GNMI":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GAL\'">Steel Galvanized</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS2205\'">Stainless Steel 2205</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS304\'">Stainless Steel 304</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS\'">Stainless Steel 316</button>';
+              break;
+            case "GNPF":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BR\'">Brass</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BZ\'">Bronze</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CP\'">Copper</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/EPDM\'">EPDM</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/EPDM?SS\'">EPDM / SS316</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/ETFE\'">ETFE</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/NBR\'">NBR</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/POLY\'">Poly</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/PTFE\'">PTFE</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/PUDF\'">PUDF</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS2205\'">Stainless Steel 2205</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS304\'">Stainless Steel 304</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS\'">Stainless Steel 316</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BK\'">Steel Black</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GAL\'">Steel Galvanised</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/VIT\'">Viton</button>';
+              break;
+            case "GNPI":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GAL\'">Steel Galvanised</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CP\'">Copper</button>';
+              break;
+            case "GNPL":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/PVC\'">PVC</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/PVCat**\'">PVC Category (fittings)</button>';
+              break;
+            case "GNTF":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BR\'">Brass</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BZ\'">Bronze</button>';
+              break;
+            case "GNVA":
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BR\'">Brass</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/BZ\'">Bronze</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/CI\'">Cast Iron</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/POLY\'">Poly</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS2205\'">Stainless Steel 2205</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS304\'">Stainless Steel 304</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/SS\'">Stainless Steel 316</button>';
+              elementsHTML += '<button type="submit" onclick="location.href=\'' + baseLocation + '/GAL\'">Galvanised Steel</button>';
+              break;
+            default:
+              break;
+          }
+          break;
+        case completeDepth:
+          elementsHTML += '<h3>It looks like the product number is complete, press finish to get the product number.</h3>' 
+        break
+      }
+      mainForm.innerHTML = elementsHTML;
+    }
+
+    function goToNextAmp() {
+      var sizeValue = document.getElementById('size').value;
+      var newVal = '';
+      if (sizeValue.length == 1) {
+        newVal = '0' + sizeValue;
+      } else {
+        newVal = sizeValue;
+      }
+      var baseURL = window.location.href;
+      const nextURL = baseURL + '/' + newVal;
+      location.href = nextURL;
+    }
+
+    function goToNext() {
+      var sizeValue = document.getElementById('size').value;
+      var newVal = '';
+      if (sizeValue.length == 1) {
+        newVal = '00' + sizeValue;
+      } else if (sizeValue.length == 2) {
+        newVal = '0' + sizeValue;
+      } else {
+        newVal = sizeValue;
+      }
+      var baseURL = window.location.href;
+      const nextURL = baseURL + '/' + newVal;
+      location.href = nextURL;
+    }
+
+    function goToNextHRC() {
+      var sizeValue = document.getElementById('size').value;
+      var baseURL = window.location.href;
+      const nextURL = baseURL + '/' + sizeValue;
+      location.href = nextURL;
+    }
+
+    function goToNextMultipleX() {
+      const sizeValueA = document.getElementById('sizeA').value;
+      const sizeValueB = document.getElementById('sizeB').value;
+      var newValA = '';
+      var newValB = '';
+
+      if (sizeValueA.length == 1) {
+        newValA = '00' + sizeValueA;
+      }
+      else if (sizeValueA.length == 2) {
+        newValA = '0' + sizeValueA;
+      } else {
+        newValA = sizeValueA;
+      }
+
+      if (sizeValueB.length == 1) {
+        newValB = '00' + sizeValueB;
+      }
+      else if (sizeValueB.length == 2) {
+        newValB = '0' + sizeValueB;
+      } else {
+        newValB = sizeValueB;
+      }
+
+      var baseURL = window.location.href;
+      const nextURL = baseURL + '/' + newValA + "X" + newValB;
+      location.href = nextURL;
+    }
+
+    function goToNextMultipleSLASH() {
+      const sizeValueA = document.getElementById('sizeA').value;
+      const sizeValueB = document.getElementById('sizeB').value;
+      var newValA = '';
+      var newValB = '';
+
+      if (sizeValueA.length == 1) {
+        newValA = '00' + sizeValueA;
+      }
+      else if (sizeValueA.length == 2) {
+        newValA = '0' + sizeValueA;
+      } else {
+        newValA = sizeValueA;
+      }
+
+      if (sizeValueB.length == 1) {
+        newValB = '00' + sizeValueB;
+      }
+      else if (sizeValueB.length == 2) {
+        newValB = '0' + sizeValueB;
+      } else {
+        newValB = sizeValueB;
+      }
+
+      var baseURL = window.location.href;
+      const nextURL = baseURL + '/' + newValA + "?" + newValB;
+      location.href = nextURL;
+    }
+
+    function goToNextMultiple() {
+      const sizeValueA = document.getElementById('sizeA').value;
+      const sizeValueB = document.getElementById('sizeB').value;
+      var newValA = '';
+      var newValB = '';
+
+      if (sizeValueA.length == 1) {
+        newValA = '00' + sizeValueA;
+      }
+      else if (sizeValueA.length == 2) {
+        newValA = '0' + sizeValueA;
+      } else {
+        newValA = sizeValueA;
+      }
+
+      if (sizeValueB.length == 1) {
+        newValB = '00' + sizeValueB;
+      }
+      else if (sizeValueB.length == 2) {
+        newValB = '0' + sizeValueB;
+      } else {
+        newValB = sizeValueB;
+      }
+
+      var baseURL = window.location.href;
+      const nextURL = baseURL + '/' + newValA + newValB;
+      location.href = nextURL;
+    }
+
+    dynamicElements();
+  </script>
+</body>
+
+</html>
