@@ -275,9 +275,15 @@
                 switch (code) {
                     case '07':
                         description = 'Volute';
-                        break;
+                        break;        
                     case '13':
                         description = 'Impeller';
+                        break;
+                    case '19':
+                        description = 'Might be a Shaft (Shafts are not a "major" stalker part)';
+                        break;
+                    case '21':
+                        description = 'Might be a Bearing Cap Drive End (Bearing Caps are not a "major" stalker part)';
                         break;
                     case '39':
                         description = 'Backplate';
@@ -427,6 +433,10 @@
                 let description = '';
 
                 switch (code) {
+                    case 'E':
+                    case 'e':
+                        description = 'Table E - (Old Part Number System)';
+                        break;
                     case 'z':
                     case 'Z':
                     case '-':
@@ -434,6 +444,10 @@
                         break;
                     case '0':
                         description = 'No Wear Ring Fitted, or N/A';
+                        break;
+                    case 'w':
+                    case 'W':
+                        'Machined for Wear Ring - (Old Part number system)'
                         break;
                     case '1':
                         description = 'Machined for Wear Ring';
@@ -471,6 +485,10 @@
                     case 'Z':
                     case '-':
                         description = 'N/A';
+                        break;
+                    case 'e':
+                    case 'E':
+                        description = 'Table E - (Old Part Number System)';
                         break;
                     case '0':
                         description = 'Table E or N/A';
@@ -521,6 +539,10 @@
                     case '4':
                         description = 'Urethane Internal Coated';
                         break;
+                    case 'p':
+                    case 'P':
+                        description = 'Polyurethane Coating (Old Part number system)';
+                        break;
                     default:
                         description = 'Unknown Internal Coating'
                 }
@@ -569,7 +591,7 @@
                 return description;
             }
         </script>
-        <p></a>.</p>
+        <p></a></p>
       </div>
     </div>
   </div>
